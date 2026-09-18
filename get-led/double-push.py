@@ -21,6 +21,12 @@ sleep_time=0.2
 while True:
     a=GPIO.input(plus)
     b=GPIO.input(minus)
+    if a and b:
+        num=255
+        print(num, dec2bin(num))
+        time.sleep(sleep_time)
+        GPIO.output(leds, dec2bin(num))
+        continue
     if a:
         num+=1
         if num>255:

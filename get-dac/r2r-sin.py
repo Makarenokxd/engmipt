@@ -3,14 +3,14 @@ import signal_generator as sg
 import time
 
 # ---------- параметры сигнала ----------
-amplitude = 3.18           # В (чуть меньше dynamic_range = 3.183 В)
-signal_frequency = 10      # Гц
-sampling_frequency = 2000  # Гц (200 точек на период для гладкости)
+amplitude = 1           # В (чуть меньше dynamic_range = 3.183 В)
+signal_frequency = 1      # Гц
+sampling_frequency = 5  # Гц (200 точек на период для гладкости)
 
 # ---------- основная программа ----------
 try:
     dac = r2r.R2R_DAC(
-        gpio_bits=[16, 20, 21, 25, 26, 17, 27, 22],
+        gpio_bits=[22, 27, 17, 26, 25, 21, 20, 16],
         dynamic_range=3.183,
         verbose=True,
     )

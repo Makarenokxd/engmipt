@@ -1,7 +1,7 @@
 import smbus
 import RPi.GPIO as GPIO
 
-
+dynamic_range = 5.11
 class MCP4725:
     def __init__(self, dynamic_range, address=0x61, verbose=True):
         self.bus = smbus.SMBus(1)
@@ -43,10 +43,6 @@ class MCP4725:
             )
 
     def set_voltage(self, voltage):
-        if not isinstance(voltage, (int, float)):
-            print("Напряжение должно быть числом")
-            return
-
         if not (0 <= voltage <= self.dynamic_range):
             print("Напряжение выходит за динамический диапазон ЦАП")
             return
@@ -61,17 +57,16 @@ if __name__ == "__main__":
 
     while True:
         try:
-            voltage = float(input("Введите напряжение в Вольтах: "))
+            voltage = float(input("Введите напряжение в вольтах :"))
 
             if 0 <= voltage <= dac.dynamic_range:
                 dac.set_voltage(voltage)
             else:
                 print(
-                    f"Напряжение выходит за динамический диапазон "
-                    f"ЦАП (0.00 - {dac.dynamic_range:.2f} В)"
+                    f"Напряжение выходит за динамический диапазон"
+                    f"ЦАП (0.00 - {dac.dynamic_range:.2f} B"
                 )
-
+            
         except ValueError:
-            print("Вы ввели не число. Попробуйте ещё раз")
-
+            print("Вы ввели не число. Попробуйте еще раз")
     dac.deinit()

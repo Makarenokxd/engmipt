@@ -3,9 +3,9 @@ import signal_generator as sg
 import time
 
 # ---------- параметры сигнала ----------
-amplitude = 3.2          # В (не больше dynamic_range ЦАП)
-signal_frequency = 10    # Гц
-sampling_frequency = 1000  # Гц
+amplitude = 3.18           # В (чуть меньше dynamic_range = 3.183 В)
+signal_frequency = 10      # Гц
+sampling_frequency = 2000  # Гц (200 точек на период для гладкости)
 
 # ---------- основная программа ----------
 try:
@@ -15,14 +15,19 @@ try:
         verbose=True,
     )
 
-    start_time = time.time()
+    start_time = time.perf_counter()
+    next_sample_time = start_time
 
     while True:
-        t = time.time() - start_time                       # время от начала
-        norm_amp = sg.get_sin_wave_amplitude(signal_frequency, t)  # 0 … 1
-        voltage = norm_amp * amplitude                     # 0 … amplitude
+        # Ждём точного момента выборки
+        next_sample_time = sg.wait_for_sampling_period(
+            sampling_frequency, next_sample_time
+        )
+
+        t = next_sample_time - start_time
+        norm_amp = sg.get_sin_wave_amplitude(signal_frequency, t)
+        voltage = norm_amp * amplitude
         dac.set_voltage(voltage)
-        sg.wait_for_sampling_period(sampling_frequency)
 
 finally:
     dac.deinit()

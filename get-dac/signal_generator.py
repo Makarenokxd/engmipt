@@ -10,6 +10,19 @@ def get_sin_wave_amplitude(freq, t):
     return (np.sin(2 * np.pi * freq * t) + 1) / 2
 
 
+def get_triangle_wave_amplitude(freq, t):
+    """
+    Возвращает нормализованную амплитуду треугольного сигнала в момент времени t.
+    Фаза внутри периода phase ∈ [0, 1):
+      первую половину периода сигнал линейно растёт 0 → 1,
+      вторую половину периода линейно убывает 1 → 0.
+    """
+    phase = (freq * t) % 1.0
+    if phase < 0.5:
+        return 2 * phase
+    return 2 * (1 - phase)
+
+
 def wait_for_sampling_period(sampling_frequency, last_time):
     """
     Ждёт до наступления следующего периода дискретизации.

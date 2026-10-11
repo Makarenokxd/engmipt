@@ -1,18 +1,19 @@
-import r2r_dac as r2r
+import pwm_dac as pwm
 import signal_generator as sg
 import time
 
 # ---------- параметры сигнала ----------
-amplitude = 3.18           # В (чуть меньше dynamic_range = 3.183 В)
+amplitude = 3.28           # В (чуть меньше dynamic_range = 3.290 В)
 signal_frequency = 10      # Гц
-sampling_frequency = 2000  # Гц (200 точек на период для гладкости)
+sampling_frequency = 200   # Гц (20 точек на период; частота ШИМ 500 Гц)
 
 # ---------- основная программа ----------
 try:
-    dac = r2r.R2R_DAC(
-        gpio_bits=[16, 20, 21, 25, 26, 17, 27, 22],
-        dynamic_range=3.183,
-        verbose=True,
+    dac = pwm.PWM_DAC(
+        gpio_pin=12,
+        pwm_frequency=500,
+        dynamic_range=3.290,
+        verbose=False,
     )
 
     start_time = time.perf_counter()
@@ -30,4 +31,4 @@ try:
         dac.set_voltage(voltage)
 
 finally:
-    dac.deinit()    
+    dac.deinit()

@@ -1,18 +1,18 @@
-import r2r_dac as r2r
+import mcp4725_driver as mcp
 import signal_generator as sg
 import time
 
 # ---------- параметры сигнала ----------
-amplitude = 3.18           # В (чуть меньше dynamic_range = 3.183 В)
+amplitude = 5.10           # В (чуть меньше dynamic_range = 5.11 В)
 signal_frequency = 10      # Гц
-sampling_frequency = 2000  # Гц (200 точек на период для гладкости)
+sampling_frequency = 1000  # Гц (100 точек на период)
 
 # ---------- основная программа ----------
 try:
-    dac = r2r.R2R_DAC(
-        gpio_bits=[16, 20, 21, 25, 26, 17, 27, 22],
-        dynamic_range=3.183,
-        verbose=True,
+    dac = mcp.MCP4725(
+        dynamic_range=5.11,
+        address=0x61,
+        verbose=False,
     )
 
     start_time = time.perf_counter()
@@ -25,9 +25,9 @@ try:
         )
 
         t = next_sample_time - start_time
-        norm_amp = sg.get_sin_wave_amplitude(signal_frequency, t)
+        norm_amp = sg.get_triangle_wave_amplitude(signal_frequency, t)
         voltage = norm_amp * amplitude
         dac.set_voltage(voltage)
 
 finally:
-    dac.deinit()    
+    dac.deinit()

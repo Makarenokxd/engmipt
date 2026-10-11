@@ -5,7 +5,7 @@ import time
 # ---------- параметры сигнала ----------
 amplitude = 3.18           # В (чуть меньше dynamic_range = 3.183 В)
 signal_frequency = 10      # Гц
-sampling_frequency = 2000  # Гц (200 точек на период для гладкости)
+sampling_frequency = 2000  # Гц (200 точек на период)
 
 # ---------- основная программа ----------
 try:
@@ -25,9 +25,9 @@ try:
         )
 
         t = next_sample_time - start_time
-        norm_amp = sg.get_sin_wave_amplitude(signal_frequency, t)
+        norm_amp = sg.get_triangle_wave_amplitude(signal_frequency, t)
         voltage = norm_amp * amplitude
         dac.set_voltage(voltage)
 
 finally:
-    dac.deinit()    
+    dac.deinit()
